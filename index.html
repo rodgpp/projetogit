@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sistema local de cadastro e pesquisa de clientes">
+  <title>Clientela — Cadastro de clientes</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#"><span>C</span><div>Clientela<small>GESTÃO DE CADASTROS</small></div></a>
+    <div class="top-actions">
+      <button class="button ghost" id="importButton">Importar JSON</button>
+      <button class="button ghost" id="exportButton">Exportar JSON</button>
+      <button class="button primary" id="newButton">+ Novo cliente</button>
+      <input id="fileInput" type="file" accept="application/json,.json" hidden>
+    </div>
+  </header>
+
+  <main>
+    <section class="headline">
+      <div><p class="eyebrow">PAINEL DE CLIENTES</p><h1>Encontre qualquer pessoa.</h1><p>Combine quantos filtros quiser para localizar rapidamente um cadastro.</p></div>
+      <div class="total-card"><strong id="totalClients">30</strong><span>clientes cadastrados</span></div>
+    </section>
+
+    <section class="filter-panel">
+      <div class="filter-title"><div><span class="sliders">≡</span><strong>Filtros de pesquisa</strong><small>Todos os filtros são combinados automaticamente</small></div><button id="clearFilters">Limpar filtros</button></div>
+      <div class="filters">
+        <label class="wide">Busca geral<input id="generalFilter" type="search" placeholder="Nome, telefone, endereço, cidade..."></label>
+        <label>Nome<input id="nameFilter" type="search" placeholder="Ex.: Mariana"></label>
+        <label>Telefone<input id="phoneFilter" type="search" placeholder="Ex.: 11 9"></label>
+        <label>Endereço<input id="addressFilter" type="search" placeholder="Rua ou bairro"></label>
+        <label>Cidade<input id="cityFilter" type="search" placeholder="Ex.: Campinas"></label>
+        <div class="state-filter"><span>Estado</span><details id="stateFilter"><summary>Todos os estados</summary><div class="state-options" id="stateOptions"></div></details></div>
+        <label>Nascimento inicial<input id="birthFromFilter" type="date"></label>
+        <label>Nascimento final<input id="birthToFilter" type="date"></label>
+      </div>
+    </section>
+
+    <section class="results">
+      <div class="result-head"><div><h2>Resultados</h2><span id="resultCount"></span></div><label>Ordenar por <select id="sortSelect"><option value="name-asc">Nome (A–Z)</option><option value="name-desc">Nome (Z–A)</option><option value="birth-desc">Mais jovem</option><option value="birth-asc">Mais velho</option><option value="city-asc">Cidade</option><option value="state-asc">Estado</option></select></label></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Cliente</th><th>Contato</th><th>Endereço</th><th>Nascimento</th><th></th></tr></thead>
+          <tbody id="clientTable"></tbody>
+        </table>
+        <div class="empty-state" id="emptyState" hidden><span>⌕</span><h3>Nenhum cliente encontrado</h3><p>Tente remover ou modificar alguns filtros.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="clientDialog">
+    <form id="clientForm">
+      <div class="dialog-head"><div><p id="dialogEyebrow">NOVO CADASTRO</p><h2 id="dialogTitle">Adicionar cliente</h2></div><button type="button" class="close" id="closeDialog" aria-label="Fechar">×</button></div>
+      <input id="clientId" type="hidden">
+      <div class="form-grid">
+        <label class="full">Nome completo<input id="clientName" required maxlength="80" placeholder="Digite o nome completo"></label>
+        <label>Telefone<input id="clientPhone" required maxlength="20" placeholder="(00) 00000-0000"></label>
+        <label>Data de nascimento<input id="clientBirth" required type="date"></label>
+        <label class="full">Endereço<input id="clientAddress" required maxlength="100" placeholder="Rua, número e bairro"></label>
+        <label>Cidade<input id="clientCity" required maxlength="50"></label>
+        <label>Estado<select id="clientState" required><option value="">Selecione</option></select></label>
+      </div>
+      <div class="dialog-actions"><button type="button" class="button ghost" id="cancelDialog">Cancelar</button><button type="submit" class="button primary">Salvar cliente</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="confirmDialog" class="confirm-dialog">
+    <div class="confirm-icon">!</div><h2>Excluir cliente?</h2><p id="confirmText"></p><div class="dialog-actions"><button class="button ghost" id="cancelDelete">Cancelar</button><button class="button danger" id="confirmDelete">Sim, excluir</button></div>
+  </dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
